@@ -6,11 +6,11 @@ exports.handler = async(event) => {
     try {
       const params = {
         TableName: 'Products',
-        ProjectionExpression: 'id',
+        ProjectionExpression: 'id, remain',
       };
 
       const data = await dynamodb.scan(params).promise();
-      const allProductIds = data.Items.map(item => item.id.N);
+      const productIds = data.Items.map(item => ({id: item.id.N, remain: item.remain.N,}));
       const emailParams = {
         Destination: {
           ToAddresses: ['rlawlgnswns@naver.com']
@@ -18,23 +18,23 @@ exports.handler = async(event) => {
         Message: {
           Body: {
             Text: {
-              Data: `Remaining stock status: ${allProductIds.join(', ')}.`
+              Data: `항목별 남은 재고 상황: ${productIds.map((product) => `${product.id}: ${product.remain}`).join(', ')}.`,
             }
           },
           Subject: {
-            Data: '일일 남은 재고 수량 알림'
+            Data: '항목별 재고 수량 알림'
           }
         },
         Source: 'rlawlgnswns@naver.com'
       };
       
-      if (allProductIds.length > 0) {
+      if (productIds.length > 0) {
         await ses.sendEmail(emailParams).promise();
       }
     
       return {
         statusCode: 200,
-        body: JSON.stringify('Stock check completed')
+        body: JSON.stringify('재고 수량 확인 완료')
       };
     } catch (err) {
       console.log(err);
