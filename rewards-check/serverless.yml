@@ -16,3 +16,6 @@ functions:
       - httpApi:
           path: /rewards/{id}
           method: get
+
+plugins:
+- serverless-offline
