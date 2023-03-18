@@ -5,7 +5,7 @@ module.exports = async function (fastify, opts) {
         return 'this is reward'
     })
 
-    fastify.get('/all/:user_id', async function (request, reply) {
+    fastify.get('/all/:user_id/:username', async function (request, reply) {
         let c
         let data
 
@@ -13,7 +13,8 @@ module.exports = async function (fastify, opts) {
         const params = {
             TableName: "Users",
             Key: {
-              id: parseInt(request.params.user_id)
+              id: parseInt(request.params.user_id),
+              username: request.params.username
             },
         };
 
@@ -39,7 +40,7 @@ module.exports = async function (fastify, opts) {
         return 'this is reward items check user: ' + JSON.stringify(data)
     })
 
-    fastify.get('/item/:product_id/:user_id', async function (request, reply) {
+    fastify.get('/item/:product_id/:user_id/:username', async function (request, reply) {
 
         let cou
         let con
@@ -48,7 +49,8 @@ module.exports = async function (fastify, opts) {
         const params = {
             TableName: "Users",
             Key: {
-              id: parseInt(request.params.user_id)
+              id: parseInt(request.params.user_id),
+              username: request.params.username
             },
         };
 
