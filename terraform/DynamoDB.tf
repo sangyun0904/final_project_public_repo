@@ -78,7 +78,7 @@ resource "aws_dynamodb_table_item" "attendance_4" {
 }
 
 resource "aws_dynamodb_table" "products" {
-  name = "products"
+  name = "Products"
   billing_mode = "PAY_PER_REQUEST"
   hash_key = "id"
 
