@@ -1,0 +1,27 @@
+service: check-stock-qauntity
+frameworkVersion: '3'
+
+custom:
+  tableName: 'Products'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-northeast-2
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+          Resource:
+            - arn:aws:dynamodb:ap-northeast-2:*:table/Products
+  environment:
+    PRODUCTS_TABLE: Products
+
+functions:
+  function1:
+    handler: index.handler

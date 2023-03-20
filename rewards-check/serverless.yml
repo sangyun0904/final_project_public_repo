@@ -1,0 +1,21 @@
+service: rewards-check
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-northeast-2
+
+functions:
+  api:
+    handler: index.handler
+    events:
+      - httpApi:
+          path: /rewards
+          method: get
+      - httpApi:
+          path: /rewards/{id}
+          method: get
+
+plugins:
+- serverless-offline
