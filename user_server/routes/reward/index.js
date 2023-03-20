@@ -96,4 +96,32 @@ module.exports = async function (fastify, opts) {
         return 'this is reward item check can reward? ' + (con <= cou)
     })
 
+    fastify.get('/sqs', async function (request, reply) {
+        var easy = require("easy-sqs");
+ 
+        var awsConfig = {
+            "accessKeyId": process.env.AWS_ACCESS_KEY_ID,
+            "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY,
+            "region": "ap-northeast-2"
+        };
+        
+        var url = "https://sqs.ap-northeast-2.amazonaws.com/180693256225/request-product-queue";
+        
+        var client = easy.createClient(awsConfig);
+        
+        client.getQueue(url, function(err, queue){
+        
+            if(err) console.log("queue does not exist");
+        
+            //messages must be strings for now...
+            var msg = JSON.stringify({body: "my message body"});
+        
+            queue.sendMessage(msg, function(err){
+                    if(err) console.log("send failed!");
+            });
+        
+        });
+        return msg
+    })
+
 }
