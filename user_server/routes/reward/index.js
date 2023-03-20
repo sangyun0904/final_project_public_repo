@@ -42,11 +42,13 @@ module.exports = async function (fastify, opts) {
 
     fastify.get('/item/:product_id/:user_id/:username', async function (request, reply) {
 
+        let user 
+        let item
         let cou
         let con
 
         // Set the parameters
-        const params = {
+        let params = {
             TableName: "Users",
             Key: {
               id: parseInt(request.params.user_id),
@@ -55,14 +57,14 @@ module.exports = async function (fastify, opts) {
         };
 
         try {
-            cou = await fastify.dynamo.get(params).promise();
-            cou = cou.Item.count
+            user = await fastify.dynamo.get(params).promise();
+            cou = user.Item.count
         } catch (e) {
             reply.send(e)
         }
 
         // Set the parameters
-        const params1 = {
+        params = {
             TableName: "Products",
             Key: {
                 id: parseInt(request.params.product_id)
@@ -70,16 +72,28 @@ module.exports = async function (fastify, opts) {
         };
 
         try {
-            con = await fastify.dynamo.get(params1).promise();
-            con = con.Item.con
+            item = await fastify.dynamo.get(params).promise();
+            con = item.Item.condition
         } catch (e) {
             reply.send(e)
+        }
+
+        if (con > cou) {
+            return "아직 " + item.Item.name + "아이템을 지급받지 못합니다. \n" + user.Item.username + " 출석 : " + cou
+        }
+        else {
+            item.Item.name + "아이템을 획득하셨습니다."
+            params = {
+                TableName: "Products",
+                Key: { "id" : {"N" : item.Item.id} },
+                UpdateExpression: "set remain = :x",
+                ExpressionAttributeValues: {
+                    ':x' : item.Item.remain - 1
+                }
+            }
         }
 
         return 'this is reward item check can reward? ' + (con <= cou)
     })
 
-    fastify.post('/item/:product_id/:user_id', async function (request, reply) {
-        return { root: true }
-    })
 }
