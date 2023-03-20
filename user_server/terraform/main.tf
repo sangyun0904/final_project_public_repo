@@ -1,11 +1,11 @@
 terraform {
-  required_version = ">= 0.12"
-  required_providers {
-    aws = {
-        source = "hashicorp/aws"
-        version = "~> 4.0"
+    required_version = ">= 0.12"
+    required_providers {
+        aws = {
+            source = "hashicorp/aws"
+            version = "~> 4.0"
+        }
     }
-  }
   
 }
 
@@ -18,21 +18,31 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "public_subnets" {
- count      = length(var.public_subnet_cidrs)
- vpc_id     = aws_vpc.main.id
- cidr_block = element(var.public_subnet_cidrs, count.index)
+    count      = length(var.public_subnet_cidrs)
+    vpc_id     = aws_vpc.main.id
+    cidr_block = element(var.public_subnet_cidrs, count.index)
+    availability_zone = element(var.azs, count.index)
  
- tags = {
-   Name = "Public Subnet ${count.index + 1}"
- }
+    tags = {
+        Name = "Public Subnet ${count.index + 1}"
+    }
 }
  
 resource "aws_subnet" "private_subnets" {
- count      = length(var.private_subnet_cidrs)
- vpc_id     = aws_vpc.main.id
- cidr_block = element(var.private_subnet_cidrs, count.index)
+    count      = length(var.private_subnet_cidrs)
+    vpc_id     = aws_vpc.main.id
+    cidr_block = element(var.private_subnet_cidrs, count.index)
+    availability_zone = element(var.azs, count.index)
  
- tags = {
-   Name = "Private Subnet ${count.index + 1}"
- }
+    tags = {
+        Name = "Private Subnet ${count.index + 1}"
+    }
+}
+
+resource "aws_internet_gateway" "gw" {
+    vpc_id = aws_vpc.main.id
+    
+    tags = {
+        Name = "Project VPC IG"
+    }
 }
