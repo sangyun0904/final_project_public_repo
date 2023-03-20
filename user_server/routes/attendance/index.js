@@ -1,5 +1,13 @@
 'use strict'
 
+var CUSTOMEPOCH = 1300000000000; // artificial epoch
+function generateRowId() {
+    var ts = new Date().getTime() - CUSTOMEPOCH; // limit to recent
+    var randid = Math.floor(Math.random() * 512);
+    ts = (ts * 64);   // bit-shift << 6
+    return (ts * 512) + randid;
+}
+
 module.exports = async function (fastify, opts) {
     fastify.get('/:user_id', async function (request, reply) {
   
@@ -7,7 +15,7 @@ module.exports = async function (fastify, opts) {
 
         // Set the parameters
         const params = {
-            TableName: "attendance", //TABLE_NAME
+            TableName: "Attendance", //TABLE_NAME
             FilterExpression : 'user_id = :id',
             ExpressionAttributeValues : {':id' : request.params.user_id}
         };
@@ -19,5 +27,25 @@ module.exports = async function (fastify, opts) {
         }
 
         return 'this is attendance check' + request.params.user_id + "\n attendance : " + JSON.stringify(data)
+    })
+
+    fastify.post('/attend', async function (request, reply) {
+        let data
+
+        // Set the parameters
+        const params = {
+            TableName : 'Attendance',
+            Item: {
+               id: generateRowId(),
+               date: Date().getTime(),
+               user_id: request.body.userId
+            }
+        };
+
+        documentClient.put(params, function(err, data) {
+            if (err) console.log(err);
+        });
+
+        return console.log(data)
     })
   }
