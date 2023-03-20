@@ -111,17 +111,16 @@ module.exports = async function (fastify, opts) {
         
         client.getQueue(url, function(err, queue){
         
-            if(err) console.log("queue does not exist");
+            if(err) return "queue does not exist";
         
             //messages must be strings for now...
             var msg = JSON.stringify({body: "my message body"});
         
             queue.sendMessage(msg, function(err){
-                    if(err) console.log("send failed!");
+                    if(err) return "send failed!";
             });
-        
+            return msg
         });
-        return msg
     })
 
 }
