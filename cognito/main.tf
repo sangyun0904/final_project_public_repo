@@ -1,4 +1,4 @@
-provider "aws" {
+provider "AWS" {
   region = "ap-northeast-2"
 }
 
@@ -120,6 +120,7 @@ resource "aws_apigatewayv2_route" "http_route" {
   api_id    = aws_apigatewayv2_api.http_api.id
   route_key = "GET /cognito/token"
   target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+  authorizer_id = aws_apigatewayv2_authorizer.cog-jwt.id
 }
 
 resource "aws_apigatewayv2_authorizer" "cog-jwt" {
