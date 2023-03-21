@@ -27,7 +27,7 @@ module.exports = async function (fastify, opts) {
             reply.send(e)
         }
 
-        return 'this is attendance check' + request.params.user_id + "\n attendance : " + JSON.stringify(data)
+        return 'this is attendance check User ID : ' + request.params.user_id + "\n attendance : " + JSON.stringify(data)
     })
 
     fastify.post('/attend', async function (request, reply) {
@@ -47,6 +47,24 @@ module.exports = async function (fastify, opts) {
         await fastify.dynamo.put(params, function(err, data) {
             if (err) console.log(err);
         });
+
+        params = {
+            TableName: 'Users',
+            Key: {
+                id: request.body.user_id,
+                username: request.body.username
+            },
+            UpdateExpression: 'set #a = #a + :x',
+            ExpressionAttributeNames: {'#a' : 'count'},
+            ExpressionAttributeValues: {
+                ':x' : 1
+            }
+        }
+
+        await fastify.dynamo.update(params, function(err, data) {
+            if (err) console.log(err);
+            else console.log(data)
+        })
 
         return console.log(data)
     })
