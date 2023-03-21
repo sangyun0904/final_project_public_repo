@@ -1,5 +1,15 @@
 'use strict'
 
+var CUSTOMEPOCH = 1300000000000; // artificial epoch
+function generateRowId(shardId) {
+    const d = new Date()
+    var ts = d.getTime() - CUSTOMEPOCH; // limit to recent
+    var randid = Math.floor(Math.random() * 512);
+    ts = (ts * 64);   // bit-shift << 6
+    ts = ts + shardId;
+    return (ts * 512) + randid;
+}
+
 module.exports = async function (fastify, opts) {
     fastify.get('/', async function (request, reply) {
         return 'this is reward'
@@ -85,12 +95,35 @@ module.exports = async function (fastify, opts) {
             item.Item.name + "아이템을 획득하셨습니다."
             params = {
                 TableName: "Products",
-                Key: { "id" : {"N" : item.Item.id} },
-                UpdateExpression: "set remain = :x",
+                Key: { id : item.Item.id },
+                UpdateExpression: "set #a = #a - :x",
+                ExpressionAttributeNames: {'#a' : 'remain'},
                 ExpressionAttributeValues: {
-                    ':x' : item.Item.remain - 1
+                    ':x' : 1
                 }
             }
+    
+            await fastify.dynamo.update(params, function(err, data) {
+                if (err) console.log(err);
+                else console.log(data)
+            })
+
+            let data
+            let day = new Date()
+
+            let params = {
+                TableName : 'Rewards',
+                Item: {
+                   id: generateRowId(item.Item.id),
+                   product_id: item.Item.id,
+                   reward_time: day.getDate(),
+                   user_id: parseInt(request.body.userId)
+                }
+            };
+    
+            await fastify.dynamo.put(params, function(err, data) {
+                if (err) console.log(err);
+            });
         }
 
         return 'this is reward item check can reward? ' + (con <= cou)

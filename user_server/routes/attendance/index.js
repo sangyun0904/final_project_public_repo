@@ -26,7 +26,7 @@ module.exports = async function (fastify, opts) {
         } catch (e) {
             reply.send(e)
         }
-        
+
 
         return 'this is attendance check User ID : ' + request.params.user_id + "\n attendance : " + JSON.stringify(data)
     })
@@ -52,7 +52,7 @@ module.exports = async function (fastify, opts) {
         params = {
             TableName: 'Users',
             Key: {
-                id: request.body.user_id,
+                id: parseInt(request.body.userId),
                 username: request.body.username
             },
             UpdateExpression: 'set #a = #a + :x',
