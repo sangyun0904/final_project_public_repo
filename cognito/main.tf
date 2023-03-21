@@ -161,4 +161,5 @@ resource "aws_apigatewayv2_stage" "example" {
   api_id = aws_apigatewayv2_api.http_api.id
   name   = "default"
   deployment_id = aws_apigatewayv2_deployment.example.id
+  auto_deploy = true
 }
