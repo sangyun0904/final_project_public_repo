@@ -1,4 +1,4 @@
-provider "AWS" {
+provider "aws" {
   region = "ap-northeast-2"
 }
 
@@ -28,7 +28,6 @@ resource "aws_cognito_user_pool_client" "user_authentication_client" {
 
   allowed_oauth_scopes = [
     "openid",
-    "email"
   ]
 
     callback_urls = [
@@ -53,11 +52,6 @@ output "user_pool_id" {
 
 output "app_client_id" {
   value = aws_cognito_user_pool_client.user_authentication_client.id
-}
-
-resource "aws_apigatewayv2_api" "http_api" {
-  name          = "cognito-api"
-  protocol_type = "HTTP"
 }
 
 resource "aws_lambda_function" "cognito-token" {
@@ -104,6 +98,11 @@ resource "aws_iam_role_policy" "lambda_exec_policy" {
       }
     ]
   })
+}
+
+resource "aws_apigatewayv2_api" "http_api" {
+  name          = "cognito-api"
+  protocol_type = "HTTP"
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
