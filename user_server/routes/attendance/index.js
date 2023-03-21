@@ -26,6 +26,7 @@ module.exports = async function (fastify, opts) {
         } catch (e) {
             reply.send(e)
         }
+        
 
         return 'this is attendance check User ID : ' + request.params.user_id + "\n attendance : " + JSON.stringify(data)
     })
@@ -35,7 +36,7 @@ module.exports = async function (fastify, opts) {
         let day = new Date()
 
         // Set the parameters
-        const params = {
+        let params = {
             TableName : 'Attendance',
             Item: {
                id: generateRowId(request.body.userId),
