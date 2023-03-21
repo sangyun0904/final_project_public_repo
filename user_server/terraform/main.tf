@@ -80,12 +80,58 @@ resource "aws_vpc_endpoint" "gateway_endpoints" {
 
 resource "aws_vpc_endpoint" "interface_endpoints" {
     count = length(var.interface_endpoint)
-    vpc_id       = aws_vpc.main.id
-    service_name = "com.amazonaws.ap-northeast-2.${element(var.interface_endpoint, count.index)}"
+    vpc_id            = aws_vpc.main.id
+    service_name      = "com.amazonaws.ap-northeast-2.${element(var.interface_endpoint, count.index)}"
     vpc_endpoint_type = "Interface"
 
     tags = {
-        Environment = "test"
-        Name = " ${element(var.interface_endpoint, count.index)} endpoint"
+        Environment   = "test"
+        Name          = " ${element(var.interface_endpoint, count.index)} endpoint"
     }
+}
+
+resource "aws_ecr_repository" "userapi_image_repo" {
+    name                 = "userapi-server"
+    image_tag_mutability = "MUTABLE"
+}  
+
+resource "aws_security_group" "userapi_sg" {
+    name = "userApi-server-sg"
+    vpc_id = aws_vpc.main.id
+
+    ingress {
+        protocol         = "tcp"
+        from_port        = 3000
+        to_port          = 3000
+        cidr_blocks      = ["0.0.0.0/0"]
+        ipv6_cidr_blocks = ["::/0"]
+    }
+    
+    egress {
+        protocol         = "-1"
+        from_port        = 0
+        to_port          = 0
+        cidr_blocks      = ["0.0.0.0/0"]
+        ipv6_cidr_blocks = ["::/0"]
+    }
+}
+
+resource "aws_ecs_task_definition" "main" {
+    family = "userApi-server-task-definition"
+    requires_compatibilities = ["FARGATE"]
+    network_mode = "awsvpc"
+    cpu = 1024
+    memory = 2048
+    container_definitions = jsonencode([{
+        name = "userApi-server-container"
+        image = "userApi-image:latest"
+        cpu = 0
+        memory = 3
+    }])
+}
+
+
+
+resource "aws_ecs_cluster" "userApi_cluster" {
+    name = "userApi-cluster"
 }
