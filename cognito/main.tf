@@ -119,7 +119,13 @@ resource "aws_apigatewayv2_route" "http_route" {
   api_id    = aws_apigatewayv2_api.http_api.id
   route_key = "GET /cognito/token"
   target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
-  authorizer_id = aws_apigatewayv2_authorizer.cog-jwt.id
+
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cog-jwt.id
+
+  depends_on = [
+    aws_apigatewayv2_authorizer.cog-jwt
+  ]
 }
 
 resource "aws_apigatewayv2_authorizer" "cog-jwt" {
@@ -138,12 +144,21 @@ jwt_configuration {
   }
 }
 
-
 output "api_endpoint" {
   value = aws_apigatewayv2_api.http_api.api_endpoint
 }
 
+resource "aws_apigatewayv2_deployment" "example" {
+  api_id      = aws_apigatewayv2_api.http_api.id
+
+  depends_on = [
+    aws_apigatewayv2_route.http_route,
+  ]
+}
+
+
 resource "aws_apigatewayv2_stage" "example" {
   api_id = aws_apigatewayv2_api.http_api.id
-  name   = "example-stage"
+  name   = "default"
+  deployment_id = aws_apigatewayv2_deployment.example.id
 }
