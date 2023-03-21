@@ -89,3 +89,12 @@ resource "aws_vpc_endpoint" "interface_endpoints" {
         Name = " ${element(var.interface_endpoint, count.index)} endpoint"
     }
 }
+
+resource "aws_ecr_repository" "userapi_image_repo" {
+    name = "userapi-server"
+
+}  
+
+resource "aws_ecs_cluster" "userapi_cluster" {
+    name = "userapi-cluster"
+}

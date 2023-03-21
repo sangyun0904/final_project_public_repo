@@ -67,6 +67,6 @@ module.exports = async function (fastify, opts) {
             else console.log(data)
         })
 
-        return console.log(data)
+        return request.body.username + " 출석되었습니다!"
     })
   }
