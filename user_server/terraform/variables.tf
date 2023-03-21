@@ -15,3 +15,13 @@ variable "azs" {
     default = ["ap-northeast-2a", "ap-northeast-2b"]
     description = "Availability Zones"
 }
+
+variable "gateway_endpoint" {
+    type = list(string)
+    default = ["dynamodb","s3"]
+}
+
+variable "interface_endpoint" {
+    type = list(string)
+    default = ["ecr.dkr", "ecr.api", "logs", "sqs"]
+}
