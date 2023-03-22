@@ -1,5 +1,5 @@
 resource "aws_iam_role" "cron_lambda_role" {
-  name = "test_role"
+  name = "cron_lambda_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
