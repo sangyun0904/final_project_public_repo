@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "attendance_lambda" {
-  function_name = "AttendanceLambda"
+  function_name = "Attendance_status"
   handler       = "index.handler"
   runtime       = "nodejs14.x"
   role          = aws_iam_role.lambda_execution_role.arn
