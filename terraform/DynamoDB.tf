@@ -149,7 +149,7 @@ resource "aws_dynamodb_table_item" "product_3" {
 }
 
 resource "aws_dynamodb_table" "rewards" {
-  name = "rewards"
+  name = "Rewards"
   billing_mode = "PAY_PER_REQUEST"
   hash_key = "id"
 

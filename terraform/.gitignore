@@ -2,3 +2,5 @@
 terraform.tfstate*
 .terraform.lock.hcl
 check-stock.zip
+product-adjustment.zip
+rewards-check.zip
