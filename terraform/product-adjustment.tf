@@ -38,8 +38,8 @@ resource "aws_iam_policy" "product_adjust_lambda_policy" {
   })
 }
 
-resource "aws_iam_policy" "lambda_logs_policy" {
-  name = "lambda_logs_policy"
+resource "aws_iam_policy" "product_adjust_lambda_logs_policy" {
+  name = "product_adjust_lambda_logs_policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -71,7 +71,7 @@ resource "aws_lambda_function" "product-adjustment_lambda" {
   }
 }
 
-resource "aws_lambda_permission" "my_permission" {
+resource "aws_lambda_permission" "product_adjust_permission" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.product-adjustment_lambda.function_name
@@ -79,13 +79,13 @@ resource "aws_lambda_permission" "my_permission" {
   source_arn = "${aws_apigatewayv2_api.admin_api.execution_arn}/*"
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "product_adjust_lambda_policy_attachment" {
   policy_arn = aws_iam_policy.product_adjust_lambda_policy.arn
   role       = aws_iam_role.product_adjust_lambda_role.name 
 }
 
-  resource "aws_iam_role_policy_attachment" "lambda_logs_policy_attachment" {
-  policy_arn = aws_iam_policy.lambda_logs_policy.arn
+  resource "aws_iam_role_policy_attachment" "product_adjust_lambda_logs_policy_attachment" {
+  policy_arn = aws_iam_policy.product_adjust_lambda_logs_policy.arn
   role       = aws_iam_role.product_adjust_lambda_role.name
 }
 
