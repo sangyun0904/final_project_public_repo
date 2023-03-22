@@ -1,5 +1,5 @@
-resource "aws_iam_role" "product_adjust_lambda_role" {
-  name = "product_adjust_role"
+resource "aws_iam_role" "rewards_check_lambda_role" {
+  name = "rewards_chceck"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -16,8 +16,8 @@ resource "aws_iam_role" "product_adjust_lambda_role" {
   })
 }
 
-resource "aws_iam_policy" "product_adjust_lambda_policy" {
-  name        = "product_adjust_lambda_policy"
+resource "aws_iam_policy" "rewards_check_lambda_policy" {
+  name        = "rewards_chceck_lambda_policy"
   
   policy = jsonencode({
     Version = "2012-10-17"
@@ -32,14 +32,14 @@ resource "aws_iam_policy" "product_adjust_lambda_policy" {
           "dynamodb:DeleteItem",
         ]
         Effect   = "Allow"
-        Resource = "arn:aws:dynamodb:ap-northeast-2:*:table/Products"
+        Resource = "arn:aws:dynamodb:ap-northeast-2:*:table/Rewards"
       },
     ]
   })
 }
 
-resource "aws_iam_policy" "lambda_logs_policy" {
-  name = "lambda_logs_policy"
+resource "aws_iam_policy" "rewards_check_logs_policy" {
+  name = "rewards_check_logs_policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -58,34 +58,34 @@ resource "aws_iam_policy" "lambda_logs_policy" {
   })
 }
 
-resource "aws_lambda_function" "product-adjustment_lambda" {
-  filename      = "./product-adjustment.zip"
-  function_name = "product-adjustment"
-  role          = aws_iam_role.product_adjust_lambda_role.arn
+resource "aws_lambda_function" "rewards_check_lambda" {
+  filename      = "./rewards-check.zip"
+  function_name = "rewards_check"
+  role          = aws_iam_role.rewards_check_lambda_role.arn
   handler       = "index.handler"
   runtime       = "nodejs14.x"
   environment {
     variables = {
-      TABLE_NAME = "Products"
+      TABLE_NAME = "Rewards"
     }
   }
 }
 
-resource "aws_lambda_permission" "my_permission" {
+resource "aws_lambda_permission" "my_permission2" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.product-adjustment_lambda.function_name
+  function_name = aws_lambda_function.rewards_check_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn = "${aws_apigatewayv2_api.admin_api.execution_arn}/*"
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
-  policy_arn = aws_iam_policy.product_adjust_lambda_policy.arn
-  role       = aws_iam_role.product_adjust_lambda_role.name 
+resource "aws_iam_role_policy_attachment" "lambda_policy_attachment2" {
+  policy_arn = aws_iam_policy.rewards_check_lambda_policy.arn
+  role       = aws_iam_role.rewards_check_lambda_role.name 
 }
 
-  resource "aws_iam_role_policy_attachment" "lambda_logs_policy_attachment" {
-  policy_arn = aws_iam_policy.lambda_logs_policy.arn
-  role       = aws_iam_role.product_adjust_lambda_role.name
+  resource "aws_iam_role_policy_attachment" "lambda_logs_policy_attachment2" {
+  policy_arn = aws_iam_policy.rewards_check_logs_policy.arn
+  role       = aws_iam_role.rewards_check_lambda_role.name
 }
 
