@@ -90,3 +90,4 @@ resource "aws_apigatewayv2_deployment" "admin_api2" {
     create_before_destroy = true
   }
 }
+
