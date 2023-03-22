@@ -234,7 +234,7 @@ resource "aws_dynamodb_table_item" "reward_4" {
     "N" : "7"
   },
   "user_id" : {
-    "N" : "2"
+    "S" : "2"
   },  
 })
 }
