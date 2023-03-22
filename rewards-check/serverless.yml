@@ -14,7 +14,7 @@ functions:
           path: /rewards
           method: get
       - httpApi:
-          path: /rewards/{id}
+          path: /rewards/{user_id}
           method: get
 
 plugins:
