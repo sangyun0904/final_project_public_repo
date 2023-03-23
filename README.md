@@ -42,6 +42,30 @@ Cognito 로 보내 인증 진행
 저장해두고 출석 및 리워드 기능을 수행할 때 인증
 여부 확인
 
-**유저 출석, 리워드 도메인
+### 유저 출석, 리워드 도메인
+
+![image](https://user-images.githubusercontent.com/60168922/227114966-fed76633-486f-47c3-9a0b-578e390da95d.png)
+- 출석관리, 받을 수 있는 리워드 확인, 리워드
+수령 기능 제공
+- VPC 외부에 있는 dynamoDB와 연동하기 위해
+dynamoDB 용 VPC endpoint 사용
+- 가용성 확보를 위해 Application Load Balancer와
+Auto scaling group을 활용
+- 서버리스 아키텍처를 구현을 위해 Fargate 사용
+
+### 이벤트 관리자, 알림 도메인
+
+![image](https://user-images.githubusercontent.com/60168922/227115098-8a9b47ae-807f-4324-b907-96dc47ae2451.png)
+#### 관리자 도메인
+- 상품 재고 관리 , 리워드 출석 현황 관리 기능
+제공
+- 서버리스 아키텍처 구현을 위해 Lambda 사용
+재고 확인 알림 도메인
+- Event Bridge의 cron기능을 활용해 매일
+주기적으로 재고 조회
+- AWS SES 서비스를 활용해 관리자에게 알림
+메일을 보냄
+- 추가적으로 유저 API 에서 상품 수령 후 재고
+부족할 시 알림 메일 생성
 
 
