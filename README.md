@@ -15,3 +15,6 @@
 - 김지훈 :
 - 김건 : 
 - 김태환 : 사용자 인증 시스템 중 Cognito 구현, 리워드 관리자 시스템 중 고객출석현황조회 리소스 구현
+
+# 아키텍처 다이어그램
+- ![image](https://user-images.githubusercontent.com/60168922/227113224-7c897ac1-d738-4d4c-8a5b-2924cb9d400c.png)
