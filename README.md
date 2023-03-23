@@ -20,14 +20,19 @@
 - 김태환 : 사용자 인증 시스템 중 Cognito 구현, 리워드 관리자 시스템 중 고객출석현황조회 리소스 구현
 
 # 아키텍처 다이어그램
+
 ![image](https://user-images.githubusercontent.com/60168922/227113224-7c897ac1-d738-4d4c-8a5b-2924cb9d400c.png)
+
 
 # 주요기능
 
 **데이터베이스 및 ERD 다이어그램
+
 ![image](https://user-images.githubusercontent.com/60168922/227113444-466c8c6a-ea9f-421a-9bb0-32397cde176b.png)
 
+
 **유저 정보 인증
+
 ![image](https://user-images.githubusercontent.com/60168922/227114056-e74a3df8-b4fa-4b03-8d11-b1c00c757c4a.png)
 - 이미 사용자가 쇼핑몰 회원으로 등록 되어 있다
 가정하고 토큰을 Cognito로부터 가져와 사용
