@@ -1,1 +1,1 @@
-# devops-03-Final-TeamC
+# 김家네 project 쇼핑몰 구매 고객 리워드 시스템
