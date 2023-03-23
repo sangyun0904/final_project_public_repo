@@ -60,7 +60,7 @@ Auto scaling group을 활용
 - 상품 재고 관리 , 리워드 출석 현황 관리 기능
 제공
 - 서버리스 아키텍처 구현을 위해 Lambda 사용
-재고 확인 알림 도메인
+#### 재고 확인 알림 도메인
 - Event Bridge의 cron기능을 활용해 매일
 주기적으로 재고 조회
 - AWS SES 서비스를 활용해 관리자에게 알림
@@ -68,4 +68,7 @@ Auto scaling group을 활용
 - 추가적으로 유저 API 에서 상품 수령 후 재고
 부족할 시 알림 메일 생성
 
+### CI/CD (github actions, CodeBuild ..) & IaC (Terraform)
+
+![image](https://user-images.githubusercontent.com/60168922/227115335-eecf1e75-6fac-40eb-9af8-41ce5c1552f1.png)
 
